@@ -1,5 +1,4 @@
 import './globals.css'
-import { dancingScript, geistSans, geistMono } from './fonts'
 
 export const metadata = {
   title: 'OnlyFries',
@@ -12,10 +11,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html 
-      lang="en" 
-      className={`${dancingScript.variable} ${geistSans.variable} ${geistMono.variable}`}
-    >
+    <html lang="en">
       <body className="antialiased">
         {children}
       </body>
