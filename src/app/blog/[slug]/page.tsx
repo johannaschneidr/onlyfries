@@ -3,23 +3,36 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import Image from 'next/image'
 import { format } from 'date-fns'
 import RootLayout from '@/components/RootLayout'
+import { Metadata } from 'next'
 
-export async function generateStaticParams() {
-  const posts = getBlogPosts()
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
-}
-
-interface BlogPostPageProps {
+// Define the params type
+type Params = {
   params: {
     slug: string
   }
 }
 
-export default async function BlogPostPage({
-  params,
-}: BlogPostPageProps) {
+// Generate metadata for each blog post
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const post = await getBlogPost(params.slug)
+  
+  return {
+    title: post.title,
+    description: post.description,
+  }
+}
+
+// Generate static params for all blog posts
+export async function generateStaticParams() {
+  const posts = getBlogPosts()
+  
+  return posts.map((post) => ({
+    slug: post.slug,
+  }))
+}
+
+// The page component
+export default async function BlogPostPage({ params }: Params) {
   const post = await getBlogPost(params.slug)
 
   return (
@@ -42,6 +55,7 @@ export default async function BlogPostPage({
               alt={post.title}
               fill
               className="object-cover rounded-lg"
+              priority
             />
           </div>
           <div className="prose prose-lg max-w-none">
