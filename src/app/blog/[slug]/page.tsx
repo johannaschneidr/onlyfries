@@ -7,7 +7,7 @@ import { Metadata } from 'next'
 
 type Props = {
   params: { slug: string }
-  searchParams: Record<string, string | string[] | undefined>
+  // searchParams: Record<string, string | string[] | undefined>
 }
 
 // Generate metadata for each blog post
@@ -29,7 +29,10 @@ export async function generateStaticParams() {
 }
 
 // The page component
-export default async function BlogPostPage({ params, searchParams }: Props) {
+export default async function BlogPostPage({ 
+  params, 
+  // searchParams 
+}: Props) {
   const post = await getBlogPost(params.slug)
 
   return (
