@@ -5,15 +5,14 @@ import { format } from 'date-fns'
 import RootLayout from '@/components/RootLayout'
 import { Metadata } from 'next'
 
-// Define the params type
-type Params = {
-  params: {
-    slug: string
-  }
+// Define the params type using Next.js types
+interface PageProps {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 // Generate metadata for each blog post
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await getBlogPost(params.slug)
   
   return {
@@ -32,7 +31,7 @@ export async function generateStaticParams() {
 }
 
 // The page component
-export default async function BlogPostPage({ params }: Params) {
+export default async function BlogPostPage({ params }: PageProps) {
   const post = await getBlogPost(params.slug)
 
   return (
