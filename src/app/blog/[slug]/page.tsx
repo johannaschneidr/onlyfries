@@ -11,11 +11,15 @@ export async function generateStaticParams() {
   }))
 }
 
+interface BlogPostPageProps {
+  params: {
+    slug: string
+  }
+}
+
 export default async function BlogPostPage({
   params,
-}: {
-  params: { slug: string }
-}) {
+}: BlogPostPageProps) {
   const post = await getBlogPost(params.slug)
 
   return (
