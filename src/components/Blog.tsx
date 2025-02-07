@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { getBlogPosts } from '@/lib/mdx'
+// import { getBlogPosts } from '@/lib/mdx'
 import { BlogMeta } from '@/types/blog'
 
 const Blog = ({ posts }: { posts: BlogMeta[] }) => {

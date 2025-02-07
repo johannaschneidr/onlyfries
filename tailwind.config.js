@@ -12,7 +12,9 @@ module.exports = {
         'fries-light': '#FFE4B0',
       },
       fontFamily: {
-        'script': ['Dancing Script', 'cursive'], // or any other script font you prefer
+        'sans': ['var(--font-geist-sans)'],
+        'mono': ['var(--font-geist-mono)'],
+        'script': ['var(--font-dancing-script)'],
       }
     },
   },
