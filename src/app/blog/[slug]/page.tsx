@@ -5,19 +5,12 @@ import { format } from 'date-fns'
 import RootLayout from '@/components/RootLayout'
 import { Metadata } from 'next'
 
-type Props = {
-  params: { slug?: string } // ⬅️ Make slug optional to reflect possible undefined value
+type BlogPageProps = {
+  params: { slug: string } // ❌ Do NOT use optional "?" here
 }
 
-// ✅ Corrected function signature and added type check
-export async function generateMetadata({ params }: { params: { slug?: string } }): Promise<Metadata> {
-  if (!params.slug) {
-    return {
-      title: 'Blog Post Not Found',
-      description: 'This blog post does not exist.',
-    }
-  }
-
+// ✅ Fix: Ensure correct function signature without promises
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await getBlogPost(params.slug)
   
   return {
@@ -26,17 +19,17 @@ export async function generateMetadata({ params }: { params: { slug?: string } }
   }
 }
 
-// ✅ Ensure generateStaticParams correctly handles async function
-export async function generateStaticParams() {
-  const posts = await getBlogPosts() // ⬅️ Add await if getBlogPosts() is async
+// ✅ Fix: Ensure correct return type in `generateStaticParams`
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  const posts = await getBlogPosts()
   return posts.map((post) => ({
     slug: post.slug,
   }))
 }
 
-// ✅ Explicitly check for params.slug to avoid undefined errors
-export default async function BlogPostPage({ params }: Props) {
-  if (!params.slug) {
+// ✅ Fix: Ensure `params` is a plain object
+export default async function BlogPostPage({ params }: BlogPageProps) {
+  if (!params || !params.slug) {
     return <RootLayout><p>Error: Blog post not found.</p></RootLayout>
   }
 
