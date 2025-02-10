@@ -6,12 +6,18 @@ import RootLayout from '@/components/RootLayout'
 import { Metadata } from 'next'
 
 type Props = {
-  params: { slug: string }
-  // searchParams: Record<string, string | string[] | undefined>
+  params: { slug?: string } // ⬅️ Make slug optional to reflect possible undefined value
 }
 
-// Generate metadata for each blog post
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+// ✅ Corrected function signature and added type check
+export async function generateMetadata({ params }: { params: { slug?: string } }): Promise<Metadata> {
+  if (!params.slug) {
+    return {
+      title: 'Blog Post Not Found',
+      description: 'This blog post does not exist.',
+    }
+  }
+
   const post = await getBlogPost(params.slug)
   
   return {
@@ -20,19 +26,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-// Generate static params for all blog posts
+// ✅ Ensure generateStaticParams correctly handles async function
 export async function generateStaticParams() {
-  const posts = getBlogPosts()
+  const posts = await getBlogPosts() // ⬅️ Add await if getBlogPosts() is async
   return posts.map((post) => ({
     slug: post.slug,
   }))
 }
 
-// The page component
-export default async function BlogPostPage({ 
-  params, 
-  // searchParams 
-}: Props) {
+// ✅ Explicitly check for params.slug to avoid undefined errors
+export default async function BlogPostPage({ params }: Props) {
+  if (!params.slug) {
+    return <RootLayout><p>Error: Blog post not found.</p></RootLayout>
+  }
+
   const post = await getBlogPost(params.slug)
 
   return (
@@ -65,4 +72,4 @@ export default async function BlogPostPage({
       </article>
     </RootLayout>
   )
-} 
+}
