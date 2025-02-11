@@ -5,42 +5,31 @@ import { format } from 'date-fns'
 import RootLayout from '@/components/RootLayout'
 import { Metadata } from 'next'
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = await getBlogPost(params.slug)
-
-  return {
-    title: post.title,
-    description: post.description,
-  }
-}
-
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const posts = await getBlogPosts()
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
-}
-
+// ✅ Correctly await params in BlogPostPage
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  if (!params || !params.slug) {
-    return <RootLayout><p>Error: Blog post not found.</p></RootLayout>
+  // 🚨 Await params directly
+  const resolvedParams = await params // Ensure params is fully resolved
+
+  console.log("📌 Resolved Params type:", typeof resolvedParams);
+  console.log("📌 Resolved Params content:", resolvedParams);
+
+  if (!resolvedParams?.slug) {
+    return <RootLayout><p>Blog post not found.</p></RootLayout>
   }
 
-  const post = await getBlogPost(params.slug)
+  const post = await getBlogPost(resolvedParams.slug)
 
   return (
     <RootLayout>
       <article className="section-padding">
         <div className="container-width max-w-4xl">
-          <div className="mb-8">
-            <h1>{post.title}</h1>
-            <div className="flex items-center gap-4 mt-4 text-gray-600">
-              <span>{post.author}</span>
-              <span>•</span>
-              <time>{format(new Date(post.date), 'MMMM d, yyyy')}</time>
-              <span>•</span>
-              <span>{post.readingTime}</span>
-            </div>
+          <h1>{post.title}</h1>
+          <div className="flex items-center gap-4 mt-4 text-gray-600">
+            <span>{post.author}</span>
+            <span>•</span>
+            <time>{format(new Date(post.date), 'MMMM d, yyyy')}</time>
+            <span>•</span>
+            <span>{post.readingTime}</span>
           </div>
           <div className="relative h-96 mb-12">
             <Image
