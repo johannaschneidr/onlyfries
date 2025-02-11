@@ -5,21 +5,15 @@ import { format } from 'date-fns'
 import RootLayout from '@/components/RootLayout'
 import { Metadata } from 'next'
 
-type BlogPageProps = {
-  params: { slug: string } // ❌ Do NOT use optional "?" here
-}
-
-// ✅ Fix: Ensure correct function signature without promises
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await getBlogPost(params.slug)
-  
+
   return {
     title: post.title,
     description: post.description,
   }
 }
 
-// ✅ Fix: Ensure correct return type in `generateStaticParams`
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = await getBlogPosts()
   return posts.map((post) => ({
@@ -27,8 +21,7 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
   }))
 }
 
-// ✅ Fix: Ensure `params` is a plain object
-export default async function BlogPostPage({ params }: BlogPageProps) {
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   if (!params || !params.slug) {
     return <RootLayout><p>Error: Blog post not found.</p></RootLayout>
   }

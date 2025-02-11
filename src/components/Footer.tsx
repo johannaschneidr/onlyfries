@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { images } from '@/assets/images'
 
 const Footer = () => {
   return (
@@ -6,7 +7,7 @@ const Footer = () => {
       <div className="container-width flex justify-between items-center">
         <div className="flex items-center">
           <Image
-            src="/onlyfries_logo.png"
+            src={images.logo}
             alt="OnlyFries Logo"
             width={150}
             height={40}
