@@ -6,8 +6,8 @@ import { images } from '@/assets/images'
 
 const Navbar = () => {
   return (
-    <nav className="py-6 bg-white">
-      <div className="container-width flex items-center justify-between">
+    <nav className="container-width py-6 border-b">
+      <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
             <Image

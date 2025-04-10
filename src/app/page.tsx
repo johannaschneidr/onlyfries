@@ -1,12 +1,13 @@
 import Hero from '@/components/Hero'
-import RootLayout from '@/components/RootLayout'
+import FeaturedPosts from '@/components/FeaturedPosts'
 
 export default function Home() {
 
   return (
-    <RootLayout>
+    <>
       <Hero />
-    </RootLayout>
+      <FeaturedPosts />
+    </>
   )
 }
 
